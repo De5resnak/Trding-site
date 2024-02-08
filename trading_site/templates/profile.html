@@ -1,0 +1,45 @@
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+
+
+{% block title %}
+Responses
+{% endblock title %}
+
+
+{% block content %}
+<a href="{% url 'post_create' %}" class="my-button">Создать пост</a>
+<h1>Здравствуйте, {{current_user.username}} </h1>
+<h1>Все ответы на ваши посты</h1>
+<br>
+{% for response in object_list %}
+<h2>{{ response.content|safe }}</h2>
+<h5>{{ response.response_date|date:'d M Y'}}</h5>
+<h5>Отправитель {{ response.sender}}</h5>
+<a href="{% url 'response_delete' response.pk %}" class="my-button">Удалить</a>
+<a href="{% url 'confirm_response' response.id %}" class="my-button">Принять</a>
+<a href="{% url 'post_detail' response.post.id %}"> Ссылка на пост</a>
+<hr>
+
+{% endfor %}
+{% if page_obj.has_previous %}
+       <a href="?page=1">1</a>
+       {% if page_obj.previous_page_number != 1 %}
+           ...
+           <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+       {% endif %}
+   {% endif %}
+
+   {# Информация о текущей странице #}
+   {{ page_obj.number }}
+
+   {# Информация о следующих страницах #}
+   {% if page_obj.has_next %}
+       <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+       {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+           <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+       {% endif %}
+   {% endif %}
+{% endblock content %}

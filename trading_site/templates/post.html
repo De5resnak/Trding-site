@@ -1,0 +1,21 @@
+
+{% extends 'flatpages/default.html' %}
+
+
+
+{% block title %}
+Post
+{% endblock title %}
+
+
+{% block content %}
+
+<h1>{{ post.title }}</h1>
+<h5>{{ post.post_date|date:'d M Y' }}</h5>
+<br>
+<h5>{{ post.content|safe }}</h5>
+<a href="{{post.id}}/response/create/" class="my-button">Ответить</a>
+{% if post.member.anyUser == current_user %}
+    <a href="{% url 'post_delete' post.pk %}" class="my-button">Удалить пост</a>
+{% endif %}
+{% endblock content %}
